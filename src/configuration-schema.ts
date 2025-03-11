@@ -3,10 +3,45 @@ import { JSONSchema7 } from "json-schema";
 
 export const configurationSchema: JSONSchema7 = {
   properties: {
-    postingscsv: {
-      type: "string",
-      title: "Job Postings CSV",
-      default: String.raw`title,location,team,link\nWorking Student,Berlin,Customer Success,https://staffbase.com\nPrincipal Solutions Engineer,New York,Solutions,https://staffbase.com\nAssociate Customer Care Agent,New York,Customer Care,https://staffbase.com\nSenior Legal Director,Toronto,Legal,https://staffbase.com`,
+    postingsjson: {
+      type: "array",
+      title: "Job Items ",
+      items: {
+        type: "object",
+        properties: {
+          title: { type: "string" },
+          location: { type: "string" },
+          team: { type: "string" },
+          link: { type: "string" },
+        },
+        required: ["title", "location", "team", "link"],
+      },
+      default: [
+        {
+          title: "Working Student",
+          location: "Berlin",
+          team: "Customer Success",
+          link: "https://staffbase.com",
+        },
+        {
+          title: "Principal Solutions Engineer",
+          location: "New York",
+          team: "Solutions",
+          link: "https://staffbase.com",
+        },
+        {
+          title: "Associate Customer Care Agent",
+          location: "New York",
+          team: "Customer Care",
+          link: "https://staffbase.com",
+        },
+        {
+          title: "Senior Legal Director",
+          location: "Toronto",
+          team: "Legal",
+          link: "https://staffbase.com",
+        },
+      ],
     },
     buttontext: {
       type: "string",
@@ -43,10 +78,8 @@ export const configurationSchema: JSONSchema7 = {
 };
 
 export const uiSchema: UiSchema = {
-  postingscsv: {
-    "ui:widget": "textarea",
-    "ui:help":
-      "Enter rows in CSV format, including header: title,location,team,link",
+  postingsjson: {
+    "ui:help": "Enter job postings as a JSON array of objects.",
   },
   buttontext: {
     "ui:help": "Text to display on the button (e.g. 'Read more'). If left empty, no button will appear.",

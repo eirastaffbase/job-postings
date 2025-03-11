@@ -25,10 +25,18 @@
       <br />
       <br />
       <section id="preview">
-            <job-postings buttontext="Read more" postingscsv="title,location,team,link
-            Working Student,Berlin,Customer Success,https://staffbase.com">
-          </job-postings>
-        </section>
+        <job-postings
+          buttontext="Read more"
+          postingsjson='[
+            {
+              "title": "Working Student",
+              "location": "Berlin",
+              "team": "Customer Success",
+              "link": "https://staffbase.com"
+            }
+          ]'
+        ></job-postings>
+      </section>
     </div>
     <div id="config" style="flex: 1"></div>
   </body>

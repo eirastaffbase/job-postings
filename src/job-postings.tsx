@@ -10,8 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState, useEffect } from "react";
 import { BlockAttributes } from "widget-sdk";
 import {
   FaMapMarkerAlt,
@@ -28,86 +27,72 @@ const ICON_MAP: Record<string, React.ComponentType> = {
 };
 
 export interface JobPostingsProps extends BlockAttributes {
-  postingscsv: string;
+  postingsjson: {
+    title: string;
+    location: string;
+    team: string;
+    link: string;
+  }[];
   buttontext: string;
   buttoncolor: string;
   lefticon: string;
   righticon: string;
 }
-function parsePostings(csv: string): JobPosting[] | null {
-  try {
-    console.log(csv);
-
-    // Unescape \\n to \n
-    const unescapedCsv = csv.replace(/\\n/g, '\n');
-    const lines = unescapedCsv.trim().split("\n");
-
-    if (lines.length <= 1) {
-      // Return null if there are no data lines (only header) or csv is empty
-      return null;
-    }
-
-    const headers = lines[0].split(",").map((h) => h.trim().toLowerCase());
-    const expectedHeaders = ["title", "location", "team", "link"];
-
-    if (!expectedHeaders.every((header) => headers.includes(header))) {
-      console.error("Error parsing CSV: Headers do not match expected format.");
-      return null;
-    }
-
-    const titleIndex = headers.indexOf("title");
-    const locationIndex = headers.indexOf("location");
-    const teamIndex = headers.indexOf("team");
-    const linkIndex = headers.indexOf("link");
-
-    const dataLines = lines.slice(1);
-
-    const parsed: JobPosting[] = dataLines
-      .filter((line) => line.trim() !== "") // Skip empty lines
-      .map((line) => {
-        const fields = line.split(",").map((f) => f.trim());
-
-        if (fields.length !== headers.length) {
-          console.warn("Warning: Row has incorrect number of fields:", line);
-        }
-
-        return {
-          title: fields[titleIndex] || "",
-          location: fields[locationIndex] || "",
-          team: fields[teamIndex] || "",
-          link: fields[linkIndex] || "#",
-        };
-      });
-
-    if (parsed.length === 0) {
-      return null;
-    }
-
-    return parsed;
-  } catch (error) {
-    console.error("Error parsing CSV:", error);
-    return null;
-  }
-}
 
 export const JobPostings = ({
-  postingscsv,
+  postingsjson,
   buttontext,
   buttoncolor,
   lefticon,
   righticon,
 }: JobPostingsProps): ReactElement => {
-  const defaultCsv = `title,location,team,link
-  Working Student,Berlin,Customer Success,https://staffbase.com
-  Customer Success Manager,Berlin,Customer Success,https://staffbase.com
-  Associate Customer Care Agent,New York,Customer Care,https://staffbase.com
-  Senior Legal Director,Vancouver,Legal,https://staffbase.com`;
+  const defaultJson = [
+    {
+      title: "Working Student",
+      location: "Berlin",
+      team: "Customer Success",
+      link: "https://staffbase.com",
+    },
+    {
+      title: "Customer Success Manager",
+      location: "Berlin",
+      team: "Customer Success",
+      link: "https://staffbase.com",
+    },
+    {
+      title: "Associate Customer Care Agent",
+      location: "New York",
+      team: "Customer Care",
+      link: "https://staffbase.com",
+    },
+    {
+      title: "Senior Legal Director",
+      location: "Vancouver",
+      team: "Legal",
+      link: "https://staffbase.com",
+    },
+  ];
 
-  const csvToUse = postingscsv !== undefined ? postingscsv : defaultCsv;
-  const parsedPostings = parsePostings(csvToUse);
+  const [postings, setPostings] = useState(defaultJson);
 
-  const postings =
-    parsedPostings !== null ? parsedPostings : parsePostings(defaultCsv);
+  useEffect(() => {
+    if (postingsjson) {
+      if (typeof postingsjson === "string") {
+        try {
+          setPostings(JSON.parse(postingsjson));
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+          setPostings(defaultJson);
+        }
+      } else if (Array.isArray(postingsjson)) {
+        setPostings(postingsjson);
+      } else {
+        setPostings(defaultJson);
+      }
+    } else {
+        setPostings(defaultJson);
+    }
+  }, [postingsjson, defaultJson]);
 
   const LeftIcon = ICON_MAP[lefticon] || FaMapMarkerAlt;
   const RightIcon = ICON_MAP[righticon] || FaBriefcase;
@@ -151,7 +136,7 @@ export const JobPostings = ({
           {buttontext && buttontext.trim() !== "" && (
             <div
               style={{
-                marginLeft: window.innerWidth <= 400 ? "10px" : "20px", // Conditional marginLeft
+                marginLeft: window.innerWidth <= 400 ? "5px" : "20px", // Conditional marginLeft
               }}
             >
               <a
