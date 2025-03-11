@@ -138,8 +138,6 @@ Senior Legal Director,Vancouver,Legal,https://staffbase.com`;
                   display: "inline-block",
                   whiteSpace: "normal",
                   textAlign: "center",
-                  wordBreak: "break-word",
-                  minWidth: "40px",
                 }}
               >
                 {buttontext}
