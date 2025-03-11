@@ -73,8 +73,6 @@ Customer Success Manager,Berlin,Customer Success,https://staffbase.com
 Associate Customer Care Agent,New York,Customer Care,https://staffbase.com
 Senior Legal Director,Commercial,New York,Legal,https://staffbase.com`;
 
-console.log(buttontext);
-
   const csvToUse = postingscsv !== undefined ? postingscsv : defaultCsv;
   const parsedPostings = parsePostings(csvToUse);
 
@@ -100,12 +98,12 @@ console.log(buttontext);
           }}
         >
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: "1.1em", fontWeight: "bold" }}>
+            <div style={{ fontSize: "16px" }}>
               {p.title}
             </div>
             <div
               style={{
-                fontSize: "0.85em",
+                fontSize: "12px",
                 color: "#555",
                 marginTop: "4px",
                 display: "flex",
@@ -130,7 +128,7 @@ console.log(buttontext);
                     buttoncolor !== undefined ? buttoncolor : "#009EF6",
                   color: "#fff",
                   padding: "0.5em 1em",
-                  borderRadius: 4,
+                  borderRadius: 6,
                   textDecoration: "none",
                 }}
               >
