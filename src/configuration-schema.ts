@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/-licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -48,12 +48,6 @@ Senior Legal Director,Vancouver,Legal,https://staffbase.com`,
         "FaBuilding",
         "FaUser",
       ],
-      enumNames: [
-        "Map Marker",
-        "Briefcase",
-        "Building",
-        "User",
-      ],
     },
     righticon: {
       type: "string",
@@ -64,12 +58,6 @@ Senior Legal Director,Vancouver,Legal,https://staffbase.com`,
         "FaMapMarkerAlt",
         "FaBuilding",
         "FaUser",
-      ],
-      enumNames: [
-        "Briefcase",
-        "Map Marker",
-        "Building",
-        "User",
       ],
     },
   },
@@ -82,15 +70,27 @@ export const uiSchema: UiSchema = {
       "Enter rows in CSV format, including header: title,location,team,link",
   },
   buttontext: {
-    "ui:help": "Text to display on the button (e.g. 'Read more')",
+    "ui:help": "Text to display on the button (e.g. 'Read more'). If left empty, no button will appear.",
   },
   buttoncolor: {
     "ui:help": "Button color in hex format (e.g. #ff0000, or just 'blue')",
   },
   lefticon: {
     "ui:help": "Left icon to use for the location/first item",
+    "ui:enumNames": [
+      "Map Marker",
+      "Briefcase",
+      "Building",
+      "User",
+    ],
   },
   righticon: {
     "ui:help": "Right icon to use for the role/second item",
+    "ui:enumNames": [
+      "Briefcase",
+      "Map Marker",
+      "Building",
+      "User",
+    ],
   },
 };

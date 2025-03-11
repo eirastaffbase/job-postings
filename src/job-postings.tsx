@@ -13,7 +13,6 @@
 
 import React, { ReactElement } from "react";
 import { BlockAttributes } from "widget-sdk";
-
 import {
   FaMapMarkerAlt,
   FaBriefcase,
@@ -21,7 +20,6 @@ import {
   FaUser,
 } from "react-icons/fa";
 
-// Create a map of icon name strings
 const ICON_MAP: Record<string, React.ComponentType> = {
   FaMapMarkerAlt,
   FaBriefcase,
@@ -29,7 +27,6 @@ const ICON_MAP: Record<string, React.ComponentType> = {
   FaUser,
 };
 
-// props
 export interface JobPostingsProps extends BlockAttributes {
   postingscsv: string;
   buttontext: string;
@@ -38,24 +35,29 @@ export interface JobPostingsProps extends BlockAttributes {
   righticon: string;
 }
 
-/**
- * Parse CSV string into an array of objects with
- * { title, location, team, link }
- */
 function parsePostings(csv: string) {
-  const lines = csv.trim().split("\n");
-  const headers = lines[0].split(",").map((h) => h.trim().toLowerCase());
-  const dataLines = lines.slice(1);
+  try {
+    const lines = csv.trim().split("\n");
+    const headers = lines[0].split(",").map((h) => h.trim().toLowerCase());
+    const dataLines = lines.slice(1);
 
-  return dataLines.map((line) => {
-    const fields = line.split(",").map((f) => f.trim());
-    return {
-      title: fields[0] || "",
-      location: fields[1] || "",
-      team: fields[2] || "",
-      link: fields[3] || "#",
-    };
-  });
+    const parsed = dataLines.map((line) => {
+      const fields = line.split(",").map((f) => f.trim());
+      return {
+        title: fields[0] || "",
+        location: fields[1] || "",
+        team: fields[2] || "",
+        link: fields[3] || "#",
+      };
+    });
+    if (parsed.length === 0) {
+      return null;
+    }
+    return parsed;
+  } catch (error) {
+    console.error("Error parsing CSV:", error);
+    return null;
+  }
 }
 
 export const JobPostings = ({
@@ -70,12 +72,14 @@ Working Student,Berlin,Customer Success,https://staffbase.com
 Customer Success Manager,Berlin,Customer Success,https://staffbase.com
 Associate Customer Care Agent,New York,Customer Care,https://staffbase.com
 Senior Legal Director,Commercial,New York,Legal,https://staffbase.com`;
-console.log('hi');
 
-console.log(postingscsv);
+console.log(buttontext);
 
   const csvToUse = postingscsv !== undefined ? postingscsv : defaultCsv;
-  const postings = parsePostings(csvToUse);
+  const parsedPostings = parsePostings(csvToUse);
+
+  const postings =
+    parsedPostings !== null ? parsedPostings : parsePostings(defaultCsv);
 
   const LeftIcon = ICON_MAP[lefticon] || FaMapMarkerAlt;
   const RightIcon = ICON_MAP[righticon] || FaBriefcase;
@@ -115,22 +119,25 @@ console.log(postingscsv);
               {p.team}
             </div>
           </div>
-          <div style={{ marginLeft: "20px" }}>
-            <a
-              href={p.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                background: buttoncolor !== undefined ? buttoncolor : "#009EF6",
-                color: "#fff",
-                padding: "0.5em 1em",
-                borderRadius: 4,
-                textDecoration: "none",
-              }}
-            >
-              {buttontext}
-            </a>
-          </div>
+          {buttontext && buttontext.trim() !== "" && ( // Conditionally render the button
+            <div style={{ marginLeft: "20px" }}>
+              <a
+                href={p.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  background:
+                    buttoncolor !== undefined ? buttoncolor : "#009EF6",
+                  color: "#fff",
+                  padding: "0.5em 1em",
+                  borderRadius: 4,
+                  textDecoration: "none",
+                }}
+              >
+                {buttontext}
+              </a>
+            </div>
+          )}
         </div>
       ))}
     </div>
