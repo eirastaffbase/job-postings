@@ -4,44 +4,34 @@ import { JSONSchema7 } from "json-schema";
 export const configurationSchema: JSONSchema7 = {
   properties: {
     postingsjson: {
-      type: "array",
-      title: "Job Items ",
-      items: {
-        type: "object",
-        properties: {
-          title: { type: "string" },
-          location: { type: "string" },
-          team: { type: "string" },
-          link: { type: "string" },
-        },
-        required: ["title", "location", "team", "link"],
-      },
-      default: [
+      type: "string",
+      title: "Job Items JSON String",
+      default: `[
         {
-          title: "Working Student",
-          location: "Berlin",
-          team: "Customer Success",
-          link: "https://staffbase.com",
+          "title": "Working Student",
+          "location": "Berlin",
+          "team": "Customer Success",
+          "link": "https://staffbase.com"
         },
         {
-          title: "Principal Solutions Engineer",
-          location: "New York",
-          team: "Solutions",
-          link: "https://staffbase.com",
+          "title": "Principal Solutions Engineer",
+          "location": "New York",
+          "team": "Solutions",
+          "link": "https://staffbase.com"
         },
         {
-          title: "Associate Customer Care Agent",
-          location: "New York",
-          team: "Customer Care",
-          link: "https://staffbase.com",
+          "title": "Associate Customer Care Agent",
+          "location": "New York",
+          "team": "Customer Care",
+          "link": "https://staffbase.com"
         },
         {
-          title: "Senior Legal Director",
-          location: "Toronto",
-          team: "Legal",
-          link: "https://staffbase.com",
-        },
-      ],
+          "title": "Senior Legal Director",
+          "location": "Toronto",
+          "team": "Legal",
+          "link": "https://staffbase.com"
+        }
+      ]`,
     },
     buttontext: {
       type: "string",

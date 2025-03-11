@@ -27,12 +27,7 @@ const ICON_MAP: Record<string, React.ComponentType> = {
 };
 
 export interface JobPostingsProps extends BlockAttributes {
-  postingsjson: {
-    title: string;
-    location: string;
-    team: string;
-    link: string;
-  }[];
+  postingsjson: string;
   buttontext: string;
   buttoncolor: string;
   lefticon: string;
