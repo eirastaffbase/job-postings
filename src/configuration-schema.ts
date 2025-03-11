@@ -6,11 +6,7 @@ export const configurationSchema: JSONSchema7 = {
     postingscsv: {
       type: "string",
       title: "Job Postings CSV",
-      default: String.raw`title,location,team,link
-Working Student,Berlin,Customer Success,https://staffbase.com
-Principal Solutions Engineer,New York,Solutions,https://staffbase.com
-Associate Customer Care Agent,New York,Customer Care,https://staffbase.com
-Senior Legal Director,Vancouver,Legal,https://staffbase.com`,
+      default: String.raw`title,location,team,link\nWorking Student,Berlin,Customer Success,https://staffbase.com\nPrincipal Solutions Engineer,New York,Solutions,https://staffbase.com\nAssociate Customer Care Agent,New York,Customer Care,https://staffbase.com\nSenior Legal Director,Toronto,Legal,https://staffbase.com`,
     },
     buttontext: {
       type: "string",

@@ -34,25 +34,55 @@ export interface JobPostingsProps extends BlockAttributes {
   lefticon: string;
   righticon: string;
 }
-
-function parsePostings(csv: string) {
+function parsePostings(csv: string): JobPosting[] | null {
   try {
-    const lines = csv.trim().split("\n");
+    console.log(csv);
+
+    // Unescape \\n to \n
+    const unescapedCsv = csv.replace(/\\n/g, '\n');
+    const lines = unescapedCsv.trim().split("\n");
+
+    if (lines.length <= 1) {
+      // Return null if there are no data lines (only header) or csv is empty
+      return null;
+    }
+
     const headers = lines[0].split(",").map((h) => h.trim().toLowerCase());
+    const expectedHeaders = ["title", "location", "team", "link"];
+
+    if (!expectedHeaders.every((header) => headers.includes(header))) {
+      console.error("Error parsing CSV: Headers do not match expected format.");
+      return null;
+    }
+
+    const titleIndex = headers.indexOf("title");
+    const locationIndex = headers.indexOf("location");
+    const teamIndex = headers.indexOf("team");
+    const linkIndex = headers.indexOf("link");
+
     const dataLines = lines.slice(1);
 
-    const parsed = dataLines.map((line) => {
-      const fields = line.split(",").map((f) => f.trim());
-      return {
-        title: fields[0] || "",
-        location: fields[1] || "",
-        team: fields[2] || "",
-        link: fields[3] || "#",
-      };
-    });
+    const parsed: JobPosting[] = dataLines
+      .filter((line) => line.trim() !== "") // Skip empty lines
+      .map((line) => {
+        const fields = line.split(",").map((f) => f.trim());
+
+        if (fields.length !== headers.length) {
+          console.warn("Warning: Row has incorrect number of fields:", line);
+        }
+
+        return {
+          title: fields[titleIndex] || "",
+          location: fields[locationIndex] || "",
+          team: fields[teamIndex] || "",
+          link: fields[linkIndex] || "#",
+        };
+      });
+
     if (parsed.length === 0) {
       return null;
     }
+
     return parsed;
   } catch (error) {
     console.error("Error parsing CSV:", error);
@@ -68,10 +98,10 @@ export const JobPostings = ({
   righticon,
 }: JobPostingsProps): ReactElement => {
   const defaultCsv = `title,location,team,link
-Working Student,Berlin,Customer Success,https://staffbase.com
-Customer Success Manager,Berlin,Customer Success,https://staffbase.com
-Associate Customer Care Agent,New York,Customer Care,https://staffbase.com
-Senior Legal Director,Vancouver,Legal,https://staffbase.com`;
+  Working Student,Berlin,Customer Success,https://staffbase.com
+  Customer Success Manager,Berlin,Customer Success,https://staffbase.com
+  Associate Customer Care Agent,New York,Customer Care,https://staffbase.com
+  Senior Legal Director,Vancouver,Legal,https://staffbase.com`;
 
   const csvToUse = postingscsv !== undefined ? postingscsv : defaultCsv;
   const parsedPostings = parsePostings(csvToUse);
