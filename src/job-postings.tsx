@@ -97,8 +97,8 @@ Senior Legal Director,Vancouver,Legal,https://staffbase.com`;
             lineHeight: "150%",
           }}
         >
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: "16px" }}>
+          <div style={{ flex: 1, minWidth: "60%" }}>
+            <div style={{ fontSize: "16px", lineHeight: "normal" }}>
               {p.title}
             </div>
             <div
@@ -108,17 +108,22 @@ Senior Legal Director,Vancouver,Legal,https://staffbase.com`;
                 marginTop: "4px",
                 display: "flex",
                 alignItems: "center",
+                lineHeight: "normal",
               }}
             >
               <LeftIcon style={{ marginRight: "5px", marginBottom: "-1px" }} />
               <span style={{ marginRight: "10px" }}>{p.location}</span>
-
+  
               <RightIcon style={{ marginRight: "5px", marginBottom: "-1px" }} />
               {p.team}
             </div>
           </div>
-          {buttontext && buttontext.trim() !== "" && ( // Conditionally render the button
-            <div style={{ marginLeft: "20px" }}>
+          {buttontext && buttontext.trim() !== "" && (
+            <div
+              style={{
+                marginLeft: window.innerWidth <= 400 ? "10px" : "20px", // Conditional marginLeft
+              }}
+            >
               <a
                 href={p.link}
                 target="_blank"
@@ -130,6 +135,11 @@ Senior Legal Director,Vancouver,Legal,https://staffbase.com`;
                   padding: "0.5em 1em",
                   borderRadius: 6,
                   textDecoration: "none",
+                  display: "inline-block",
+                  whiteSpace: "normal",
+                  textAlign: "center",
+                  wordBreak: "break-word",
+                  minWidth: "40px",
                 }}
               >
                 {buttontext}
