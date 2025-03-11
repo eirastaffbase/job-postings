@@ -71,7 +71,7 @@ export const JobPostings = ({
 Working Student,Berlin,Customer Success,https://staffbase.com
 Customer Success Manager,Berlin,Customer Success,https://staffbase.com
 Associate Customer Care Agent,New York,Customer Care,https://staffbase.com
-Senior Legal Director,Commercial,New York,Legal,https://staffbase.com`;
+Senior Legal Director,Vancouver,Legal,https://staffbase.com`;
 
   const csvToUse = postingscsv !== undefined ? postingscsv : defaultCsv;
   const parsedPostings = parsePostings(csvToUse);
