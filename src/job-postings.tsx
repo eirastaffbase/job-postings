@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/-licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,8 +14,28 @@
 import React, { ReactElement } from "react";
 import { BlockAttributes } from "widget-sdk";
 
+import {
+  FaMapMarkerAlt,
+  FaBriefcase,
+  FaBuilding,
+  FaUser,
+} from "react-icons/fa";
+
+// Create a map of icon name strings
+const ICON_MAP: Record<string, React.ComponentType> = {
+  FaMapMarkerAlt,
+  FaBriefcase,
+  FaBuilding,
+  FaUser,
+};
+
+// props
 export interface JobPostingsProps extends BlockAttributes {
-  postingsCsv: string;
+  postingscsv: string;
+  buttontext: string;
+  buttoncolor: string;
+  lefticon: string;
+  righticon: string;
 }
 
 /**
@@ -24,13 +44,11 @@ export interface JobPostingsProps extends BlockAttributes {
  */
 function parsePostings(csv: string) {
   const lines = csv.trim().split("\n");
-  // First line is a header: title,location,team,link
   const headers = lines[0].split(",").map((h) => h.trim().toLowerCase());
   const dataLines = lines.slice(1);
 
   return dataLines.map((line) => {
     const fields = line.split(",").map((f) => f.trim());
-    // In case of missing columns, be defensive:
     return {
       title: fields[0] || "",
       location: fields[1] || "",
@@ -41,47 +59,78 @@ function parsePostings(csv: string) {
 }
 
 export const JobPostings = ({
-  postingsCsv,
+  postingscsv,
+  buttontext,
+  buttoncolor,
+  lefticon,
+  righticon,
 }: JobPostingsProps): ReactElement => {
-  const postings = parsePostings(postingsCsv);
-  console.log("postings", postings);
+  const defaultCsv = `title,location,team,link
+Working Student,Berlin,Customer Success,https://staffbase.com
+Customer Success Manager,Berlin,Customer Success,https://staffbase.com
+Associate Customer Care Agent,New York,Customer Care,https://staffbase.com
+Senior Legal Director,Commercial,New York,Legal,https://staffbase.com`;
+console.log('hi');
+
+console.log(postingscsv);
+
+  const csvToUse = postingscsv !== undefined ? postingscsv : defaultCsv;
+  const postings = parsePostings(csvToUse);
+
+  const LeftIcon = ICON_MAP[lefticon] || FaMapMarkerAlt;
+  const RightIcon = ICON_MAP[righticon] || FaBriefcase;
 
   return (
-    <div style={{ fontFamily: "Arial, sans-serif", maxWidth: 400 }}>
+    <div style={{ maxWidth: 500 }}>
       {postings.map((p, idx) => (
         <div
           key={idx}
           style={{
-            borderBottom: "1px solid #eee",
+            borderBottom:
+              idx === postings.length - 1 ? "none" : "1px solid #eee",
             padding: "1em 0",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            lineHeight: "150%",
           }}
         >
-          <div>
+          <div style={{ flex: 1 }}>
             <div style={{ fontSize: "1.1em", fontWeight: "bold" }}>
               {p.title}
             </div>
-            <div style={{ color: "#555" }}>
-              <span style={{ marginRight: 8 }}>{p.location}</span>
-              <span>| {p.team}</span>
+            <div
+              style={{
+                fontSize: "0.85em",
+                color: "#555",
+                marginTop: "4px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <LeftIcon style={{ marginRight: "5px", marginBottom: "-1px" }} />
+              <span style={{ marginRight: "10px" }}>{p.location}</span>
+
+              <RightIcon style={{ marginRight: "5px", marginBottom: "-1px" }} />
+              {p.team}
             </div>
           </div>
-          <a
-            href={p.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              background: "#007bff",
-              color: "#fff",
-              padding: "0.5em 1em",
-              borderRadius: 4,
-              textDecoration: "none",
-            }}
-          >
-            Read more
-          </a>
+          <div style={{ marginLeft: "20px" }}>
+            <a
+              href={p.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                background: buttoncolor !== undefined ? buttoncolor : "#009EF6",
+                color: "#fff",
+                padding: "0.5em 1em",
+                borderRadius: 4,
+                textDecoration: "none",
+              }}
+            >
+              {buttontext}
+            </a>
+          </div>
         </div>
       ))}
     </div>
