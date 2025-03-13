@@ -69,6 +69,7 @@ export const configurationSchema: JSONSchema7 = {
 
 export const uiSchema: UiSchema = {
   postingsjson: {
+    "ui:widget": "textarea",
     "ui:help": "Enter job postings as a JSON array of objects.",
   },
   buttontext: {
